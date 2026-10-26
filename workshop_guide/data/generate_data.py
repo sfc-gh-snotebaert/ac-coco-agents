@@ -50,7 +50,6 @@ for f in fl:
     lead=int(random.expovariate(1/40))+1
     ch=random.choices(["WEB","MOBILE_APP","TRAVEL_AGENT","CALL_CENTER"],[45,30,20,5])[0]
     status="CANCELLED" if f[10]=="CANCELLED" else random.choices(["FLOWN","NO_SHOW","REFUNDED"],[93,4,3])[0]
-    if fdate>dt.date(2026,10,23) and status!="CANCELLED": status="CONFIRMED"
     fare=round(base,2);tax=round(fare*.15+35,2)
     bk.append([bid,f"PNR{bid:06d}",f[0],random.randint(1,3000),(fdate-dt.timedelta(lead)).isoformat(),c[0],ch,random.randint(1,2) if random.random()<.15 else 1,fare,tax,round(fare+tax,2),int(f[8]*(1 if c[0]=="ECONOMY" else 1.5)),status])
 # Business-class propensity rises with Aeroplan tier (separate RNG keeps the rest of the data stable)
