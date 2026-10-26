@@ -2,7 +2,7 @@ AIRPORT_CODE,AIRPORT_NAME,CITY,PROVINCE_STATE,COUNTRY,REGION,AIRPORT_TYPE
 YUL,Montréal–Trudeau,Montréal,QC,Canada,North America,HUB
 YYZ,Toronto Pearson,Toronto,ON,Canada,North America,HUB
 YVR,Vancouver Intl,Vancouver,BC,Canada,North America,HUB
-YYC,Calgary Intl,Calgary,AB,Canada,North America,FOCUS
+YYC,Calgary Intl,Calgary,AB,Canada,North America,HUB
 YOW,Ottawa Macdonald-Cartier,Ottawa,ON,Canada,North America,DOMESTIC
 YHZ,Halifax Stanfield,Halifax,NS,Canada,North America,DOMESTIC
 YEG,Edmonton Intl,Edmonton,AB,Canada,North America,DOMESTIC
