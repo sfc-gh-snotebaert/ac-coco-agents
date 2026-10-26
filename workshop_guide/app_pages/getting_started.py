@@ -67,3 +67,6 @@ col2.metric("Credits", "$400", help="Complimentary Snowflake credits included")
 col3.metric("Credit card", "Not required", help="No payment method needed to start")
 
 st.caption("The free trial provides more than enough credits to complete the entire workshop")
+
+st.space("small")
+st.info(":material/wifi_off: **Tip:** if a statement fails with a connection error (for example `390318 Failed to connect to DB`), ask Cortex Code to re-run that step. It's a network blip, not a problem with your prompt.")
