@@ -1,52 +1,36 @@
 import streamlit as st
 
 st.title("Workshop agenda")
+st.caption("November 12, 2026, Air Canada Office")
 
 AGENDA = [
-    ("{{TIME_ARRIVAL}}", "Arrival & Coffee", None, None),
-    ("{{TIME_WELCOME}}", "Welcome & Workshop Overview", None, None),
-    ("{{TIME_SESSION_1}}", "Session 1: Data Prep", "{{DUR_SESSION_1}}", "1"),
-    ("{{TIME_SESSION_2}}", "Session 2: Cortex Analyst & Semantic Views", "{{DUR_SESSION_2}}", "2"),
-    ("{{TIME_SESSION_3}}", "Session 3: Cortex Search", "{{DUR_SESSION_3}}", "3"),
-    ("{{TIME_BREAK}}", ":orange-badge[BREAK]", None, None),
-    ("{{TIME_SESSION_4}}", "Session 4: Cortex Agents", "{{DUR_SESSION_4}}", "4"),
-    ("{{TIME_SESSION_5}}", "Session 5: CoWork", "{{DUR_SESSION_5}}", "5"),
-    ("{{TIME_SESSION_6}}", "Session 6: Streamlit", "{{DUR_SESSION_6}}", "6"),
+    ("9:00 AM", "Welcome & overview", None),
+    ("9:10 AM", "Session 1: Review the data model", "25 min"),
+    ("9:35 AM", "Session 2: Create the semantic view", "25 min"),
+    ("10:00 AM", "Session 3: Create the agent", "25 min"),
+    ("10:25 AM", ":orange-badge[BREAK]", None),
+    ("10:35 AM", "Session 4: Secure the agent", "25 min"),
+    ("11:00 AM", "Session 5: Evaluate the agent", "25 min"),
+    ("11:25 AM", "Session 6: Forecast skill", "20 min"),
+    ("11:45 AM", "Session 7: CoWork dashboard", "20 min"),
+    ("12:05 PM", "Wrap-up & Q&A", None),
 ]
-
-for time, title, duration, session_num in AGENDA:
-    if session_num:
-        col1, col2 = st.columns([1, 4])
-        col1.markdown(f"**{time}**")
-        col2.markdown(f":material/play_circle: **{title}** :gray-badge[{duration}]")
-    elif "BREAK" in title:
-        col1, col2 = st.columns([1, 4])
-        col1.markdown(f"**{time}**")
-        col2.markdown(f"{title}")
-    else:
-        col1, col2 = st.columns([1, 4])
-        col1.markdown(f"**{time}**")
-        col2.markdown(f":gray[{title}]")
+for time, title, dur in AGENDA:
+    c1, c2 = st.columns([1, 4])
+    c1.markdown(f"**{time}**")
+    c2.markdown(f":material/play_circle: **{title}** :gray-badge[{dur}]" if dur else (title if "BREAK" in title else f":gray[{title}]"))
 
 st.space("medium")
-
-st.markdown("##### What you'll build by end of session")
+st.markdown("##### What you'll build")
 st.markdown("""
-| Object Type | Count | Examples |
-|-------------|-------|---------|
-| **Tables** | {{NUM_TABLES}} | {{TABLE_EXAMPLES}} |
-| **Cortex Search Services** | 1 | {{SEARCH_SERVICE_NAME}} |
-| **Semantic Views** | 1 | {{SEMANTIC_VIEW_NAME}} with relationships, metrics, and AI instructions |
-| **Cortex Agents** | 1 | {{AGENT_NAME}} with Analyst + Search + custom tools |
-| **Streamlit Apps** | 1 | Operations dashboard with AI chat |
-""")
-
-st.space("small")
-
-st.markdown("##### Location")
-with st.container(border=True):
-    st.markdown("""
-:material/location_on: **{{VENUE_NAME}}, {{VENUE_CITY}}**
-
-{{EVENT_DATE}} — {{EVENT_TIME_RANGE}}
+| Object | Name |
+|---|---|
+| Database / schema / warehouse | AIRLINE_OPS.OPS / AIRLINE_WH |
+| Tables | FACT_BOOKING, DIM_FLIGHT, DIM_PASSENGER, DIM_AIRPORT |
+| Semantic view | AIRLINE_OPS_SV |
+| Cortex Agent | AIRLINE_OPS_AGENT (Air Canada Ops Assistant) |
+| Security | AIRLINE_ANALYST role, PII masking, RSS, AIRLINE_AGENT_SVC identity |
+| Evaluation | AGENT_EVAL_DATASET + evaluation runs |
+| ML | FLIGHT_VOLUME_FORECAST + FORECAST_FLIGHT_VOLUME tool |
+| CoWork | Network Performance 2026 dashboard |
 """)

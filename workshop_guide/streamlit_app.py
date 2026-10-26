@@ -13,8 +13,8 @@ def _title(session_num: int, label: str) -> str:
 
 
 st.set_page_config(
-    page_title="{{WORKSHOP_TITLE}}",
-    page_icon="{{PAGE_ICON}}",
+    page_title="Create Agents using CoCo — Air Canada",
+    page_icon=":material/flight:",
     layout="wide",
 )
 
@@ -30,15 +30,18 @@ page = st.navigation(
             st.Page("app_pages/getting_started.py", title="Getting Started", icon=":material/rocket_launch:"),
             st.Page("app_pages/agenda.py", title="Agenda", icon=":material/calendar_today:"),
         ],
-        "Block 1: Data & Intelligence": [
-            st.Page("app_pages/session_01.py", title=_title(1, "Data Prep"), icon=":material/database:"),
-            st.Page("app_pages/session_02.py", title=_title(2, "Cortex Analyst & Semantic Views"), icon=":material/chat:"),
-            st.Page("app_pages/session_03.py", title=_title(3, "Cortex Search"), icon=":material/search:"),
+        "Block 1: Data & Semantics": [
+            st.Page("app_pages/session_01.py", title=_title(1, "Review Data Model"), icon=":material/database:"),
+            st.Page("app_pages/session_02.py", title=_title(2, "Semantic View"), icon=":material/description:"),
         ],
-        "Block 2: Agents & Apps": [
-            st.Page("app_pages/session_04.py", title=_title(4, "Cortex Agents"), icon=":material/smart_toy:"),
-            st.Page("app_pages/session_05.py", title=_title(5, "CoWork"), icon=":material/group:"),
-            st.Page("app_pages/session_06.py", title=_title(6, "Streamlit"), icon=":material/web:"),
+        "Block 2: Build & Govern Agents": [
+            st.Page("app_pages/session_03.py", title=_title(3, "Create Agent"), icon=":material/smart_toy:"),
+            st.Page("app_pages/session_04.py", title=_title(4, "Secure Agent"), icon=":material/lock:"),
+            st.Page("app_pages/session_05.py", title=_title(5, "Evaluate Agent"), icon=":material/fact_check:"),
+        ],
+        "Block 3: Extend & Share": [
+            st.Page("app_pages/session_06.py", title=_title(6, "Forecast Skill"), icon=":material/trending_up:"),
+            st.Page("app_pages/session_07.py", title=_title(7, "CoWork Dashboard"), icon=":material/dashboard:"),
         ],
     },
     position="sidebar",

@@ -1,78 +1,17 @@
 import streamlit as st
 from components import render_session_header, render_prompt, render_explanation, render_technologies_used, render_key_concepts, render_what_you_built
 
-render_session_header(4, "Cortex Agents", "{{TIME_SESSION_4}}", "{{DUR_SESSION_4}}", "Cortex Agent with Analyst + Search + custom tools")
+render_session_header(4, 'Secure the Agent', '10:35 AM – 11:00 AM', '25 min', 'Least-privilege access with a dedicated role, Restricted Session Scope and agent identity')
 
-render_technologies_used([
-    {"name": "Cortex Agent (CREATE AGENT)", "description": "An orchestrating AI that plans tasks, selects tools, executes them, reflects on results, and generates responses.", "icon": "smart_toy"},
-    {"name": "Tool Orchestration", "description": "The Agent automatically routes questions to the right tool: Cortex Analyst for structured data, Cortex Search for documents, custom UDFs for logic.", "icon": "route"},
-    {"name": "Custom Tools (UDFs)", "description": "User-defined functions that extend Agent capabilities with custom business logic.", "icon": "build"},
-])
+render_technologies_used([{'name': 'RBAC', 'description': 'Grant USAGE on the agent and SELECT on the semantic view and tables only to the roles that need them.', 'icon': 'admin_panel_settings'}, {'name': 'Restricted Session Scope (RSS)', 'description': 'Limits which roles and privileges a Cortex Code / agent session may use, e.g. read-only SQL.', 'icon': 'lock'}, {'name': 'Agent identity', 'description': "Run the agent's tools under a dedicated service identity rather than the caller's full privileges.", 'icon': 'badge'}])
 
+render_prompt('Prompt 4.1', 'Least-privilege role', 'Create a role AIRLINE_ANALYST with only: USAGE on AIRLINE_WH, database AIRLINE_OPS and schema OPS, SELECT on the 4 tables, SELECT/REFERENCES on semantic view AIRLINE_OPS_SV, and USAGE on agent AIRLINE_OPS_AGENT. Grant it to my user. Then add a masking policy on DIM_PASSENGER.EMAIL and DATE_OF_BIRTH that shows values only to ACCOUNTADMIN, and verify as AIRLINE_ANALYST that the agent returns masked values.')
 
-PROMPT_4_1 = """In {{DATABASE_NAME}}.{{SCHEMA_NAME}}, create a Cortex Agent called {{AGENT_NAME}}.
+render_prompt('Prompt 4.2', 'Restricted Session Scope', '/guardrails Create a Restricted Session Scope for this Cortex Code session that blocks ACCOUNTADMIN and SECURITYADMIN and allows read-only SQL on AIRLINE_OPS only. Apply it, then try to DROP TABLE AIRLINE_OPS.OPS.DIM_AIRPORT and show that it is blocked. Finally explain how to remove the scope.')
+render_explanation("What this prompt does", "RSS limits what the AI may do on your behalf, even if your own role could do more. It's the guardrail for letting an agent act inside production accounts.")
 
-It should:
-- Use auto as the orchestration model
-- Have two tools: the {{SEMANTIC_VIEW_NAME}} semantic view (for structured data queries) and the {{SEARCH_SERVICE_NAME}} Cortex Search service (for unstructured document search)
-- Include instructions defining it as the {{AGENT_ROLE_DESCRIPTION}}, guiding it to use structured data for {{STRUCTURED_QUESTION_TYPES}} and search for {{UNSTRUCTURED_QUESTION_TYPES}}
-- Mention domain context: {{AGENT_DOMAIN_CONTEXT}}
-- Include 3-4 sample questions spanning both tools
+render_prompt('Prompt 4.3', 'Agent identity', "Configure AIRLINE_OPS_AGENT so its tools run under a dedicated service identity: create a SERVICE user/role AIRLINE_AGENT_SVC with the AIRLINE_ANALYST grants, attach it as the agent's execution identity, and show the agent's configuration. Explain the difference between caller's-rights and agent-identity execution, and when to use each.")
 
-Execute and show confirmation."""
+render_key_concepts([{'term': 'Least privilege', 'definition': 'An agent can only do what its role allows: securing data is securing the agent.'}, {'term': 'Caller vs agent identity', 'definition': 'Caller identity = row-level security follows the user; agent identity = consistent, auditable service-level access.'}])
 
-render_prompt("Prompt 4.1", "Create the Cortex Agent", PROMPT_4_1)
-
-render_explanation("What this prompt does", """
-Creates a **Cortex Agent** combining structured analytics with document search:
-
-- **Structured questions** → routed to Cortex Analyst via the semantic view
-- **Unstructured questions** → routed to Cortex Search
-- **Mixed questions** → Agent uses both tools and synthesizes
-""")
-
-
-PROMPT_4_2 = """Test our {{AGENT_NAME}} with these queries:
-
-{{AGENT_TEST_QUERIES}}
-
-Show the responses and note which tools the agent selected."""
-
-render_prompt("Prompt 4.2", "Test the Agent", PROMPT_4_2)
-
-render_explanation("What this prompt does", """
-Tests the agent with structured, unstructured, and mixed queries to validate tool routing.
-""")
-
-
-PROMPT_4_3 = """In {{DATABASE_NAME}}.{{SCHEMA_NAME}}, add a custom tool to the agent:
-
-1. Create a UDF:
-
-{{CUSTOM_UDF_SQL}}
-
-2. Recreate {{AGENT_NAME}} with {{CUSTOM_UDF_NAME}} as an additional tool.
-
-3. Test with: "{{CUSTOM_TOOL_TEST_QUESTION}}"
-
-Execute all SQL."""
-
-render_prompt("Prompt 4.3", "Agent with Custom Tool", PROMPT_4_3)
-
-render_explanation("What this prompt does", """
-Adds a **custom UDF tool** for domain-specific calculations. The Agent can now query data, search documents, AND run custom business logic.
-""")
-
-
-render_key_concepts([
-    {"term": "Cortex Agent", "definition": "A Snowflake object that orchestrates LLMs, Analyst, Search, and custom tools to answer complex questions."},
-    {"term": "Tool Routing", "definition": "The Agent selects the right tool for each question based on the question type and tool descriptions."},
-    {"term": "Custom Tools", "definition": "SQL UDFs registered as Agent tools. Enable domain-specific calculations and business logic."},
-])
-
-render_what_you_built([
-    "{{AGENT_NAME}} — Cortex Agent with Analyst + Search tools",
-    "Tested structured, unstructured, and mixed queries",
-    "{{CUSTOM_UDF_NAME}} as a custom tool",
-    "Enhanced agent with three tool types",
-])
+render_what_you_built(['AIRLINE_ANALYST role and PII masking', 'Restricted Session Scope applied and tested', 'Agent running under a service identity'])

@@ -1,113 +1,22 @@
 import streamlit as st
 from components import render_session_header, render_prompt, render_explanation, render_technologies_used, render_key_concepts, render_what_you_built
 
-render_session_header(1, "Data Prep", "{{TIME_SESSION_1}}", "{{DUR_SESSION_1}}", "Database, schema, warehouse, and {{NUM_TABLES}} operational tables loaded from CSV")
+render_session_header(1, 'Review the Data Model', '9:10 AM – 9:35 AM', '25 min', 'AIRLINE_OPS star schema: 1 fact table, 3 dimensions')
 
-render_technologies_used([
-    {"name": "Database & Schema", "description": "Snowflake's organizational hierarchy for objects. A database contains schemas, and schemas contain tables, views, and other objects.", "icon": "database"},
-    {"name": "CSV File Format", "description": "Snowflake can infer schema and load data directly from CSV files using file formats and COPY INTO commands.", "icon": "table_chart"},
-    {"name": "Virtual Warehouse", "description": "Snowflake's compute engine. A warehouse provides the CPU and memory to execute queries and load data.", "icon": "memory"},
-])
-
-
-PROMPT_1_1 = """Create the following Snowflake objects for our {{SCENARIO_SHORT_NAME}} AI workshop:
-
-1. A database called {{DATABASE_NAME}}
-2. A schema called {{SCHEMA_NAME}} inside that database
-3. A stage called DATA in the schema {{SCHEMA_NAME}} with a directory table and server side encryption
-3. A warehouse called {{WAREHOUSE_NAME}} (size MEDIUM, auto-suspend after 60 seconds, auto-resume enabled)
-4. Set the session context to use these objects
-
-Execute all SQL and confirm each object was created."""
-
-render_prompt("Prompt 1.1", "Create Database, Schema & Warehouse", PROMPT_1_1)
-
-render_explanation("What this prompt does", """
-Creates the foundational Snowflake objects:
-
-```sql
-CREATE DATABASE {{DATABASE_NAME}};
-CREATE SCHEMA {{DATABASE_NAME}}.{{SCHEMA_NAME}};
-CREATE WAREHOUSE {{WAREHOUSE_NAME}}
-  WAREHOUSE_SIZE = 'MEDIUM'
-  AUTO_SUSPEND = 60
-  AUTO_RESUME = TRUE;
-
-USE DATABASE {{DATABASE_NAME}};
-USE SCHEMA {{SCHEMA_NAME}};
-USE WAREHOUSE {{WAREHOUSE_NAME}};
-```
-""")
-
-
-PROMPT_1_2 = """In {{DATABASE_NAME}}.{{SCHEMA_NAME}}, the {{NUM_TABLES}} CSV files have been uploaded to an internal stage called DATA.
-
-For all {{NUM_TABLES}} tables ({{TABLE_LIST_UPPERCASE}}):
-
-1. Create a file format (CSV with PARSE_HEADER=TRUE, FIELD_OPTIONALLY_ENCLOSED_BY='"')
-2. Create the tables with appropriate column types inferred from the data. Ensure to convert the column names to uppercase.
-3. Load the data
-
-Use CREATE TABLE with INFER_SCHEMA from a stage and then COPY INTO them. The key requirement is that all {{NUM_TABLES}} tables are created and populated.
-
-Execute all SQL."""
+render_technologies_used([{'name': 'Cortex Code', 'description': "Snowflake's AI coding agent in Snowsight. You describe the outcome; it writes and runs the SQL.", 'icon': 'terminal'}, {'name': 'Star Schema', 'description': 'A central fact table (bookings) joined to dimension tables (flights, passengers, airports).', 'icon': 'schema'}, {'name': 'INFER_SCHEMA', 'description': 'Detects column names and types directly from staged CSV files.', 'icon': 'table_chart'}])
 
 st.markdown("""
-**Before running the prompt below, download the CSV files and upload them to the `DATA` stage:**
-
-1. Download the zip file containing all CSVs: [{{ZIP_FILENAME}}]({{ZIP_DOWNLOAD_URL}})
-2. Unzip the file on your computer to get the individual CSV files.
-3. Using Snowsight, use the Horizon Catalog to browse to the `{{DATABASE_NAME}}.{{SCHEMA_NAME}}.DATA` stage and upload all CSV files.
-4. Then copy the prompt below into Cortex Code and execute.
+**Before Prompt 1.2:** download [airline_ops_data.zip](https://github.com/sfc-gh-snotebaert/ac-coco-agents/raw/main/workshop_guide/data/airline_ops_data.zip), unzip it, then in Snowsight browse to the `AIRLINE_OPS.OPS.DATA` stage (Catalog → Database Explorer) and upload the 4 CSV files.
 """)
 
-render_prompt("Prompt 1.2", "Load and Create Tables from CSV", PROMPT_1_2)
+render_prompt('Prompt 1.1', 'Create database, schema, stage & warehouse', 'Create the Snowflake objects for our Air Canada airline operations workshop:\n0. First check whether a database called AIRLINE_OPS already exists. If it does, STOP and tell me who owns it. Do not modify, replace or write into an existing AIRLINE_OPS database.\n1. A database called AIRLINE_OPS\n2. A schema called OPS in that database\n3. An internal stage called DATA in AIRLINE_OPS.OPS with a directory table and server-side encryption\n4. A warehouse called AIRLINE_WH (size SMALL, auto-suspend 60 seconds, auto-resume)\n5. Set the session context to use these objects\nExecute all SQL and confirm each object was created.')
 
-render_explanation("What this prompt does", """
-Loads all operational data tables from CSV files uploaded to the internal stage `DATA`:
+render_prompt('Prompt 1.2', 'Load the 4 tables from CSV', 'In AIRLINE_OPS.OPS, the CSV files DIM_AIRPORT.csv, DIM_FLIGHT.csv, DIM_PASSENGER.csv and FACT_BOOKING.csv are in the stage @DATA.\n1. Create a CSV file format with PARSE_HEADER=TRUE and FIELD_OPTIONALLY_ENCLOSED_BY=\'"\'\n2. Create the tables DIM_AIRPORT, DIM_FLIGHT, DIM_PASSENGER and FACT_BOOKING using INFER_SCHEMA, with uppercase column names\n3. Load them with COPY INTO (MATCH_BY_COLUMN_NAME=CASE_INSENSITIVE)\nExecute all SQL and show the row count of each table.')
+render_explanation("What this prompt does", 'Expected row counts: **DIM_AIRPORT 20, DIM_FLIGHT 10,355, DIM_PASSENGER 3,000, FACT_BOOKING 56,329**. Flights run from Jan 1, 2025 to Oct 31, 2026, which gives you a full previous year plus the current year for year-over-year analysis.')
 
-```sql
-CREATE OR REPLACE FILE FORMAT csv_format
-  TYPE = CSV
-  PARSE_HEADER = TRUE
-  FIELD_OPTIONALLY_ENCLOSED_BY = '"';
+render_prompt('Prompt 1.3', 'Review and document the data model', 'Review the data model in AIRLINE_OPS.OPS:\n1. Describe each table, its grain and its likely primary key\n2. Identify the foreign key relationships (FACT_BOOKING.FLIGHT_ID -> DIM_FLIGHT, FACT_BOOKING.PASSENGER_ID -> DIM_PASSENGER, DIM_FLIGHT.ORIGIN_AIRPORT_CODE and DESTINATION_AIRPORT_CODE -> DIM_AIRPORT) and validate them with orphan-row checks\n3. Add PRIMARY KEY and FOREIGN KEY constraints (informational) plus table and column COMMENTs that describe each column in airline business terms\n4. Profile the data: date range of flights, flights per year, bookings per year, revenue per year\nSummarize the model as a Mermaid ER diagram.')
+render_explanation("What this prompt does", 'Constraints and comments are not just documentation: the semantic view generator and Cortex Analyst read them, so good descriptions here directly improve answer quality later.')
 
-CREATE OR REPLACE TABLE {{EXAMPLE_TABLE}}
-  USING TEMPLATE (
-    SELECT ARRAY_AGG(OBJECT_CONSTRUCT(*))
-    FROM TABLE(INFER_SCHEMA(
-      LOCATION => '@{{DATABASE_NAME}}.{{SCHEMA_NAME}}.DATA/{{EXAMPLE_TABLE_FILE}}',
-      FILE_FORMAT => 'csv_format'
-    ))
-  );
+render_key_concepts([{'term': 'Grain', 'definition': 'What one row represents. FACT_BOOKING = one booking; DIM_FLIGHT = one flight leg on one date.'}, {'term': 'Informational constraints', 'definition': "Snowflake doesn't enforce PK/FK (except NOT NULL), but tools use them to infer joins."}])
 
-COPY INTO {{EXAMPLE_TABLE}}
-  FROM @{{DATABASE_NAME}}.{{SCHEMA_NAME}}.DATA/{{EXAMPLE_TABLE_FILE}}
-  FILE_FORMAT = csv_format;
-```
-
-**The tables**:
-{{TABLE_DESCRIPTIONS_MARKDOWN}}
-""")
-
-
-PROMPT_1_3 = """Run a query in {{DATABASE_NAME}}.{{SCHEMA_NAME}} that shows every table name and its row count, ordered by row count descending. Format it nicely."""
-
-render_prompt("Prompt 1.3", "Verify All Data Tables", PROMPT_1_3)
-
-render_explanation("What this prompt does", """
-A quick verification query. You should see approximately **{{TOTAL_ROWS}} total rows** across {{NUM_TABLES}} tables.
-""")
-
-
-render_key_concepts([
-    {"term": "Internal Stage", "definition": "A named Snowflake stage that stores files within Snowflake's managed storage. Files are uploaded via Snowsight UI or PUT command."},
-    {"term": "INFER_SCHEMA", "definition": "A Snowflake table function that automatically detects column names and types from files in a stage."},
-    {"term": "File Format", "definition": "A named object specifying how to parse files (CSV delimiters, headers, quoting). Created once and reused across multiple COPY INTO operations."},
-])
-
-render_what_you_built([
-    "{{DATABASE_NAME}} database and {{SCHEMA_NAME}} schema",
-    "{{WAREHOUSE_NAME}} warehouse (Medium, auto-suspend 60s)",
-    "{{NUM_TABLES}} operational data tables loaded from CSV (~{{TOTAL_ROWS}} total rows)",
-])
+render_what_you_built(['AIRLINE_OPS.OPS schema, DATA stage and AIRLINE_WH warehouse', '4 tables, about 70K rows loaded', 'Documented keys, relationships and column comments'])

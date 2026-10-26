@@ -1,0 +1,21 @@
+AIRPORT_CODE,AIRPORT_NAME,CITY,PROVINCE_STATE,COUNTRY,REGION,AIRPORT_TYPE
+YUL,Montréal–Trudeau,Montréal,QC,Canada,North America,HUB
+YYZ,Toronto Pearson,Toronto,ON,Canada,North America,HUB
+YVR,Vancouver Intl,Vancouver,BC,Canada,North America,HUB
+YYC,Calgary Intl,Calgary,AB,Canada,North America,FOCUS
+YOW,Ottawa Macdonald-Cartier,Ottawa,ON,Canada,North America,DOMESTIC
+YHZ,Halifax Stanfield,Halifax,NS,Canada,North America,DOMESTIC
+YEG,Edmonton Intl,Edmonton,AB,Canada,North America,DOMESTIC
+YWG,Winnipeg Richardson,Winnipeg,MB,Canada,North America,DOMESTIC
+YQB,Québec City Jean Lesage,Québec,QC,Canada,North America,DOMESTIC
+JFK,New York JFK,New York,NY,USA,North America,INTERNATIONAL
+LAX,Los Angeles Intl,Los Angeles,CA,USA,North America,INTERNATIONAL
+ORD,Chicago O'Hare,Chicago,IL,USA,North America,INTERNATIONAL
+MIA,Miami Intl,Miami,FL,USA,North America,INTERNATIONAL
+CUN,Cancún Intl,Cancún,QR,Mexico,North America,SUN
+LHR,London Heathrow,London,ENG,United Kingdom,Europe,INTERNATIONAL
+CDG,Paris Charles de Gaulle,Paris,IDF,France,Europe,INTERNATIONAL
+FRA,Frankfurt,Frankfurt,HE,Germany,Europe,INTERNATIONAL
+NRT,Tokyo Narita,Tokyo,CHB,Japan,Asia,INTERNATIONAL
+HND,Tokyo Haneda,Tokyo,TYO,Japan,Asia,INTERNATIONAL
+GRU,São Paulo Guarulhos,São Paulo,SP,Brazil,South America,INTERNATIONAL
