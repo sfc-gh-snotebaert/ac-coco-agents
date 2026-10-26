@@ -53,5 +53,15 @@ for f in fl:
     if fdate>dt.date(2026,10,23) and status!="CANCELLED": status="CONFIRMED"
     fare=round(base,2);tax=round(fare*.15+35,2)
     bk.append([bid,f"PNR{bid:06d}",f[0],random.randint(1,3000),(fdate-dt.timedelta(lead)).isoformat(),c[0],ch,random.randint(1,2) if random.random()<.15 else 1,fare,tax,round(fare+tax,2),int(f[8]*(1 if c[0]=="ECONOMY" else 1.5)),status])
+# Business-class propensity rises with Aeroplan tier (separate RNG keeps the rest of the data stable)
+r2=random.Random(7);tier_of={p[0]:p[6] for p in pax}
+biz={"NONE":.06,"25K":.09,"35K":.13,"50K":.20,"75K":.30,"SUPER ELITE":.45}
+mult={c[0]:c[2] for c in cabins}
+for b in bk:
+  pb=biz[tier_of[b[3]]];u=r2.random()
+  new="BUSINESS" if u<pb else ("PREMIUM_ECONOMY" if u<pb+.12 else "ECONOMY")
+  if new!=b[5]:
+    b[8]=round(b[8]/mult[b[5]]*mult[new],2);b[9]=round(b[8]*.15+35,2);b[10]=round(b[8]+b[9],2)
+    b[11]=int(b[11]/(1 if b[5]=="ECONOMY" else 1.5)*(1 if new=="ECONOMY" else 1.5));b[5]=new
 w=csv.writer(open("FACT_BOOKING.csv","w",newline=""));w.writerow(["BOOKING_ID","BOOKING_REFERENCE","FLIGHT_ID","PASSENGER_ID","BOOKING_DATE","CABIN_CLASS","BOOKING_CHANNEL","SEATS_BOOKED","BASE_FARE_CAD","TAXES_FEES_CAD","TOTAL_FARE_CAD","AEROPLAN_POINTS_EARNED","BOOKING_STATUS"]);w.writerows(bk)
 print(len(airports),len(fl),len(pax),len(bk))
