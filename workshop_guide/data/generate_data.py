@@ -30,7 +30,13 @@ while d<=end:
     dist=random.randint(500,1500) if a in ("A220-300","A321","B737 MAX 8") else random.randint(5000,11000)
     fl.append([fid,num[r]+("" if o==r[0] else "1"),d.isoformat(),o,de,f"{hr:02d}:{random.choice(['00','15','30','45'])}",a,fleet[a],dist,delay,st])
   d+=dt.timedelta(1)
-w=csv.writer(open("DIM_FLIGHT.csv","w",newline=""));w.writerow(["FLIGHT_ID","FLIGHT_NUMBER","FLIGHT_DATE","ORIGIN_AIRPORT_CODE","DESTINATION_AIRPORT_CODE","SCHEDULED_DEPARTURE_TIME","AIRCRAFT_TYPE","SEAT_CAPACITY","DISTANCE_KM","DEPARTURE_DELAY_MINUTES","FLIGHT_STATUS"]);w.writerows(fl)
+# Seats sold per flight: 75-92% load factor, higher in summer and holidays (separate RNG keeps other data stable)
+r3=random.Random(11)
+for f in fl:
+  m=dt.date.fromisoformat(f[2]).month
+  base=.80+(.07 if m in (6,7,8,12) else 0)-(.04 if m in (1,2,11) else 0)
+  f.append(0 if f[10]=="CANCELLED" else min(f[7],int(f[7]*min(.97,max(.70,r3.gauss(base,.04))))))
+w=csv.writer(open("DIM_FLIGHT.csv","w",newline=""));w.writerow(["FLIGHT_ID","FLIGHT_NUMBER","FLIGHT_DATE","ORIGIN_AIRPORT_CODE","DESTINATION_AIRPORT_CODE","SCHEDULED_DEPARTURE_TIME","AIRCRAFT_TYPE","SEAT_CAPACITY","DISTANCE_KM","DEPARTURE_DELAY_MINUTES","FLIGHT_STATUS","SEATS_SOLD"]);w.writerows(fl)
 fn="Émilie Olivier Sophie Liam Chloé Noah Maya Lucas Zoé William Ava Félix Léa Ethan Amélie Jacob Priya Arjun Mei Wei Sarah David Fatima Omar Isabelle Mathieu Hannah Ryan Julie Marc".split()
 ln="Tremblay Gagnon Roy Côté Bouchard Gauthier Morin Lavoie Fortin Smith Brown Wilson Martin Lee Patel Singh Nguyen Chen Wong MacDonald Leblanc Pelletier Kim Garcia Dubois Campbell".split()
 tiers=["NONE"]*45+["25K"]*20+["35K"]*15+["50K"]*10+["75K"]*6+["SUPER ELITE"]*4
