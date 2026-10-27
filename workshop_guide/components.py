@@ -32,7 +32,7 @@ def is_session_complete(session_num: int) -> bool:
     )
 
 
-def render_prompt(prompt_id: str, title: str, prompt_text: str):
+def render_prompt(prompt_id: str, title: str, prompt_text: str, caption: str = "Copy this prompt and paste it into Cortex Code", language: str = "text"):
     key = _prompt_key(prompt_id)
     cb_key = f"_cb_{key}"
     store = _done_store()
@@ -49,8 +49,8 @@ def render_prompt(prompt_id: str, title: str, prompt_text: str):
                 on_change=_on_toggle,
                 args=(prompt_id,),
             )
-        st.caption("Copy this prompt and paste it into Cortex Code")
-        st.code(prompt_text, language="text", wrap_lines=True)
+        st.caption(caption)
+        st.code(prompt_text, language=language, wrap_lines=True)
 
 
 def render_explanation(title: str, body: str):

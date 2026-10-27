@@ -29,7 +29,7 @@ st.markdown("""
 | Tables | FACT_BOOKING, DIM_FLIGHT, DIM_PASSENGER, DIM_AIRPORT |
 | Semantic view | AIRLINE_OPS_SV |
 | Cortex Agent | AIRLINE_OPS_AGENT (Air Canada Ops Assistant) |
-| Security | AIRLINE_ANALYST role, PII masking, RSS, AIRLINE_AGENT_SVC identity |
+| Security | AIRLINE_ANALYST role, PII masking, agent session policy (RSS), agent-aware masking |
 | Evaluation | AGENT_EVAL_DATASET + evaluation runs |
 | ML | FLIGHT_VOLUME_FORECAST + FORECAST_FLIGHT_VOLUME tool |
 | CoWork | Network Performance 2026 dashboard |
