@@ -1,12 +1,12 @@
 import streamlit as st
 
 SESSION_PROMPTS = {1: ['Prompt 1.1', 'Prompt 1.2', 'Prompt 1.3'],
-    2: ['Prompt 2.1', 'Prompt 2.2', 'Prompt 2.3'],
+    2: ['Prompt 2.1', 'Prompt 2.2'],
     3: ['Prompt 3.1', 'Prompt 3.2'],
-    4: ['Prompt 4.1', 'Prompt 4.2', 'Prompt 4.3'],
+    4: ['Prompt 4.1', 'Prompt 4.2', 'Prompt 4.3', 'Prompt 4.4'],
     5: ['Prompt 5.1', 'Prompt 5.2', 'Prompt 5.3'],
     6: ['Prompt 6.1', 'Prompt 6.2', 'Prompt 6.3'],
-    7: ['Prompt 7.1', 'Prompt 7.2']}
+    7: ['Prompt 7.1']}
 
 
 def _done_store() -> dict:
@@ -32,8 +32,9 @@ def is_session_complete(session_num: int) -> bool:
     )
 
 
-def render_prompt(prompt_id: str, title: str, prompt_text: str, caption: str = "Copy this prompt and paste it into Cortex Code", language: str = "text"):
-    key = _prompt_key(prompt_id)
+def render_prompt(prompt_id: str, title: str, prompt_text: str, caption: str = "Copy this prompt and paste it into Cortex Code", language: str = "text", key: str | None = None):
+    state_id = key or prompt_id
+    key = _prompt_key(state_id)
     cb_key = f"_cb_{key}"
     store = _done_store()
     if cb_key not in st.session_state:
@@ -47,7 +48,7 @@ def render_prompt(prompt_id: str, title: str, prompt_text: str, caption: str = "
                 "Done",
                 key=cb_key,
                 on_change=_on_toggle,
-                args=(prompt_id,),
+                args=(state_id,),
             )
         st.caption(caption)
         st.code(prompt_text, language=language, wrap_lines=True)

@@ -39,7 +39,7 @@ st.markdown("#### Step 3: Open Cortex Code")
 
 with st.container(border=True):
     st.markdown("""
-Once logged in to Snowsight, open **Cortex Code** from the left navigation panel. This is the AI coding assistant where you will paste all prompts from this workshop.
+Once logged in to Snowsight, open **Cortex Code** from the blue button down at the right. This is the AI coding assistant where you will paste all prompts from this workshop.
 
 Confirm you are using the **ACCOUNTADMIN** role — you can check and switch roles in the bottom-left of the Snowsight UI.
 """)
