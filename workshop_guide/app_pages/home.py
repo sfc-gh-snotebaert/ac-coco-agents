@@ -5,12 +5,12 @@ st.markdown("Air Canada hands-on lab: build, secure, evaluate and share Cortex A
 st.space("small")
 c1, c2, c3 = st.columns(3)
 c1.metric("Sessions", "7")
-c2.metric("Prompts", "19")
+c2.metric("Prompts", "18")
 c3.metric("Duration", "3 hrs")
 st.space("medium")
 st.markdown("#### How this workshop works")
 st.markdown("""
-Each session has **numbered prompts**. Copy each prompt into **Cortex Code** in Snowsight (or into **CoWork** where noted) and run them in order, because every session builds on the one before.
+Each session has **numbered prompts** and **Snowsight steps**. Each card tells you where it goes: **Cortex Code**, a **SQL worksheet**, **Agent Studio** or **CoWork**. Run them in order, because every session builds on the one before.
 """)
 st.markdown("#### The scenario")
 with st.container(border=True):
@@ -31,7 +31,7 @@ with st.container(border=True):
     st.markdown("""
 1. **Review the data model**: load and document the AIRLINE_OPS star schema
 2. **Semantic view**: business metrics (revenue, OTP, load factor) for Cortex Analyst
-3. **Cortex Agent**: Air Canada Ops Assistant, available in CoWork
+3. **Cortex Agent**: Air Canada Ops Assistant, deployed and tested in Agent Studio
 4. **Secure the agent**: least-privilege role, PII masking, Restricted Session Scope, agent identity
 5. **Evaluate the agent**: ground-truth dataset, scored runs, improvement loop
 6. **Forecast skill**: an ML forecast of flight volume exposed as an agent tool
