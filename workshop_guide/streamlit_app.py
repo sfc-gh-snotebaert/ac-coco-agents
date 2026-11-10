@@ -23,6 +23,8 @@ st.logo(
     icon_image=str(_DIR / "static" / "snowflake_logo.png"),
 )
 
+st.html('<style>[class*="st-key-caption_"] p { font-size: 1.15rem; }</style>')
+
 page = st.navigation(
     {
         "": [

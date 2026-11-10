@@ -50,7 +50,9 @@ def render_prompt(prompt_id: str, title: str, prompt_text: str, caption: str = "
                 on_change=_on_toggle,
                 args=(state_id,),
             )
-        st.caption(caption)
+        bold_caption = "  \n".join(f"**{line}**" if line.strip() else line for line in caption.split("  \n"))
+        with st.container(key=f"caption_{key}"):
+            st.markdown(bold_caption)
         st.code(prompt_text, language=language, wrap_lines=True)
 
 
